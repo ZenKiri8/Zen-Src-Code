@@ -1,0 +1,73 @@
+-- Create the main GUI
+local gui = Instance.new("ScreenGui")
+gui.Name = "SwagGUI"
+gui.Parent = game.CoreGui
+
+-- Create the main frame
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 200, 0, 100)
+frame.Position = UDim2.new(0.5, -100, 0.5, -50)
+frame.BackgroundColor3 = Color3.new(0, 0, 0)
+frame.BorderColor3 = Color3.new(0, 0, 0)
+frame.BorderSizePixel = 1
+frame.BackgroundTransparency = 1
+frame.Parent = gui
+
+-- Create the gradient button
+local button = Instance.new("TextButton")
+button.Size = UDim2.new(0, 50, 0, 50)
+button.Position = UDim2.new(0.1, 50, 0.1, 50)
+button.BackgroundColor3 = Color3.new(0.8, 0, 0)  -- Start color (red)
+button.BorderColor3 = Color3.new(0, 0, 0)
+button.BorderSizePixel = 1
+button.Font = Enum.Font.SourceSansBold
+button.Text = "SwagUsers"
+button.TextColor3 = Color3.new(1, 1, 1)
+button.TextSize = 18
+button.Parent = frame
+
+-- Create the function to open the GUI with the number of users
+local function openSwagUsersGUI()
+    local swagGui = Instance.new("ScreenGui")
+    swagGui.Name = "SwagUsersGUI"
+    swagGui.Parent = game.CoreGui
+
+    local swagFrame = Instance.new("Frame")
+    swagFrame.Size = UDim2.new(0, 200, 0, 100)
+    swagFrame.Position = UDim2.new(0.5, -100, 0.5, -50)
+    swagFrame.BackgroundColor3 = Color3.new(0, 0, 0)
+    swagFrame.BorderColor3 = Color3.new(0, 0, 0)
+    swagFrame.BorderSizePixel = 1
+    swagFrame.BackgroundTransparency = 1
+    swagFrame.Parent = swagGui
+
+    local usersLabel = Instance.new("TextLabel")
+    usersLabel.Size = UDim2.new(1, 0, 1, 0)
+    usersLabel.Position = UDim2.new(0, 0, 0, 0)
+    usersLabel.BackgroundTransparency = 1
+    usersLabel.Font = Enum.Font.SourceSansBold
+    usersLabel.TextColor3 = Color3.new(1, 1, 1)
+    usersLabel.TextSize = 18
+    usersLabel.Text = "USER: 0"  -- Default value when no users found
+    usersLabel.Parent = swagFrame
+
+    -- Function to update the number of users
+    local function updateUsersLabel()
+        local total = 0
+        for _, player in ipairs(game.Workspace.Players:GetChildren()) do
+            if not player.UpperTorso:FindFirstChild("OriginalSize") and player.Name ~= game.Players.LocalPlayer.Name then
+                total = total + 1
+            end
+        end
+        usersLabel.Text = "USER: " .. tostring(total)
+    end
+
+    -- Call the update function initially
+    updateUsersLabel()
+
+    -- Connect the update function to a button click event
+    button.MouseButton1Click:Connect(updateUsersLabel)
+end
+
+-- Connect the openSwagUsersGUI function to the button click event
+button.MouseButton1Click:Connect(openSwagUsersGUI)
