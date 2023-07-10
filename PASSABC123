@@ -1,0 +1,177 @@
+local gui = Instance.new("ScreenGui")
+gui.Name = "RobloxGUI"
+gui.Parent = game.CoreGui
+
+local key = "ABC123" -- Change this to your desired key
+
+local keyGui = Instance.new("Frame")
+keyGui.Size = UDim2.new(0, 300, 0, 200)
+keyGui.Position = UDim2.new(0.5, -150, 0.5, -100)
+keyGui.BackgroundColor3 = Color3.fromRGB(0, 0, 50)
+keyGui.BorderColor3 = Color3.fromRGB(255, 0, 0)
+keyGui.BorderSizePixel = 1
+keyGui.Parent = gui
+
+local keyTitle = Instance.new("TextLabel")
+keyTitle.Size = UDim2.new(1, 0, 0, 50)
+keyTitle.Position = UDim2.new(0, 0, 0, 0)
+keyTitle.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+keyTitle.Text = "Enter the Key:"
+keyTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyTitle.Font = Enum.Font.GothamBold
+keyTitle.TextSize = 20
+keyTitle.Parent = keyGui
+
+local keyTextBox = Instance.new("TextBox")
+keyTextBox.Size = UDim2.new(0, 200, 0, 30)
+keyTextBox.Position = UDim2.new(0.5, -100, 0, 80)
+keyTextBox.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+keyTextBox.BorderColor3 = Color3.fromRGB(255, 0, 0)
+keyTextBox.BorderSizePixel = 1
+keyTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyTextBox.Font = Enum.Font.GothamBold
+keyTextBox.TextSize = 14
+keyTextBox.Parent = keyGui
+
+local keyButton = Instance.new("TextButton")
+keyButton.Size = UDim2.new(0, 100, 0, 30)
+keyButton.Position = UDim2.new(0.5, -50, 0, 140)
+keyButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+keyButton.BorderColor3 = Color3.fromRGB(255, 0, 0)
+keyButton.BorderSizePixel = 1
+keyButton.Text = "Confirm"
+keyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyButton.Font = Enum.Font.GothamBold
+keyButton.TextSize = 14
+keyButton.Parent = keyGui
+
+keyButton.MouseButton1Click:Connect(function()
+    if keyTextBox.Text == key then
+        keyGui:Destroy()
+
+        local chatGui = Instance.new("ScreenGui")
+        chatGui.Name = "RobloxChatGUI"
+        chatGui.Parent = game.CoreGui
+
+        local frame = Instance.new("Frame")
+        frame.Size = UDim2.new(0, 500, 0, 400)
+        frame.Position = UDim2.new(0.5, -250, 0.5, -200)
+        frame.BackgroundColor3 = Color3.fromRGB(0, 0, 50)
+        frame.BorderColor3 = Color3.fromRGB(255, 0, 0)
+        frame.BorderSizePixel = 1
+        frame.BackgroundTransparency = 0.5
+        frame.Active = true
+        frame.Draggable = true
+        frame.Parent = chatGui
+
+        local topBar = Instance.new("Frame")
+        topBar.Size = UDim2.new(1, 0, 0, 30)
+        topBar.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        topBar.BorderColor3 = Color3.fromRGB(255, 0, 0)
+        topBar.BorderSizePixel = 1
+        topBar.Parent = frame
+
+        local title = Instance.new("TextLabel")
+        title.Size = UDim2.new(1, -10, 1, 0)
+        title.Position = UDim2.new(0, 5, 0, 0)
+        title.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        title.Text = "Balli Prem"
+        title.TextColor3 = Color3.fromRGB(255, 255, 255)
+        title.Font = Enum.Font.GothamBold
+        title.TextSize = 16
+        title.Parent = topBar
+
+        local buttons = {
+            "kick",
+            "ban",
+            "freeze",
+            "unfreeze",
+            "sit",
+            "unsit",
+            "msg",
+            "giveanim",
+            "fling",
+            "showtag"
+        }
+
+        for i, buttonName in ipairs(buttons) do
+            local button = Instance.new("TextButton")
+            button.Size = UDim2.new(0, 100, 0, 30)
+            button.Position = UDim2.new(0, 10, 0, (i - 1) * 40 + 40)
+            button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+            button.BorderColor3 = Color3.fromRGB(255, 0, 0)
+            button.BorderSizePixel = 1
+            button.Text = "!" .. buttonName
+            button.TextColor3 = Color3.fromRGB(255, 255, 255)
+            button.Font = Enum.Font.GothamBold
+            button.TextSize = 14
+            button.AutoButtonColor = false
+            button.Parent = frame
+
+            local corner = Instance.new("UICorner")
+            corner.CornerRadius = UDim.new(0, 5)
+            corner.Parent = button
+
+            button.MouseButton1Click:Connect(function()
+                local message = "!" .. buttonName
+                game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
+            end)
+        end
+
+        local dropTextBox = Instance.new("TextBox")
+        dropTextBox.Size = UDim2.new(0, 100, 0, 30)
+        dropTextBox.Position = UDim2.new(0, 10, 0, #buttons * 40 + 50)
+        dropTextBox.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        dropTextBox.BorderColor3 = Color3.fromRGB(255, 0, 0)
+        dropTextBox.BorderSizePixel = 1
+        dropTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+        dropTextBox.PlaceholderText = "Drop amount"
+        dropTextBox.Parent = frame
+
+        local dropTextBoxCorner = Instance.new("UICorner")
+        dropTextBoxCorner.CornerRadius = UDim.new(0, 5)
+        dropTextBoxCorner.Parent = dropTextBox
+
+        local dropButton = Instance.new("TextButton")
+        dropButton.Size = UDim2.new(0, 100, 0, 30)
+        dropButton.Position = UDim2.new(0, 120, 0, #buttons * 40 + 50)
+        dropButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        dropButton.BorderColor3 = Color3.fromRGB(255, 0, 0)
+        dropButton.BorderSizePixel = 1
+        dropButton.Text = "Drop"
+        dropButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        dropButton.Font = Enum.Font.GothamBold
+        dropButton.TextSize = 14
+        dropButton.AutoButtonColor = false
+        dropButton.Parent = frame
+
+        local dropButtonCorner = Instance.new("UICorner")
+        dropButtonCorner.CornerRadius = UDim.new(0, 5)
+        dropButtonCorner.Parent = dropButton
+
+        dropButton.MouseButton1Click:Connect(function()
+            local amount = tonumber(dropTextBox.Text)
+            if amount then
+                local message = "!drop " .. tostring(amount)
+                game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
+            end
+        end)
+
+        local flingButton = Instance.new("TextButton")
+        flingButton.Size = UDim2.new(0, 100, 0, 30)
+        flingButton.Position = UDim2.new(0, 10, 0, #buttons * 40 + 100)
+        flingButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        flingButton.BorderColor3 = Color3.fromRGB(255, 0, 0)
+        flingButton.BorderSizePixel = 1
+        flingButton.Text = "!fling"
+        flingButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        flingButton.Font = Enum.Font.GothamBold
+        flingButton.TextSize = 14
+        flingButton.AutoButtonColor = false
+        flingButton.Parent = frame
+
+        local flingButtonCorner = Instance.new("UICorner")
+        flingButtonCorner.CornerRadius = UDim.new(0, 5)
+        flingButtonCorner.Parent = flingButton
+    end
+end)
