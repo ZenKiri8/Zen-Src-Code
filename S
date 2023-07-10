@@ -1,0 +1,179 @@
+-- Function to make a frame draggable
+local function dragify(Frame)
+    local dragToggle = nil
+    local dragSpeed = 0.25 -- You can edit this.
+    local dragInput = nil
+    local dragStart = nil
+    local dragPos = nil
+
+    local function updateInput(input)
+        local Delta = input.Position - dragStart
+        local Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + Delta.X, startPos.Y.Scale, startPos.Y.Offset + Delta.Y)
+        game:GetService("TweenService"):Create(Frame, TweenInfo.new(dragSpeed), {Position = Position}):Play()
+    end
+
+    Frame.InputBegan:Connect(function(input)
+        if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+            dragToggle = true
+            dragStart = input.Position
+            startPos = Frame.Position
+            input.Changed:Connect(function()
+                if (input.UserInputState == Enum.UserInputState.End) then
+                    dragToggle = false
+                end
+            end)
+        end
+    end)
+
+    Frame.InputChanged:Connect(function(input)
+        if (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+            dragInput = input
+        end
+    end)
+
+    game:GetService("UserInputService").InputChanged:Connect(function(input)
+        if (input == dragInput and dragToggle) then
+            updateInput(input)
+        end
+    end)
+end
+
+-- Create the Executor GUI
+local ExecutorGui = Instance.new("ScreenGui")
+ExecutorGui.Name = "ExecutorGui"
+ExecutorGui.DisplayOrder = 999
+ExecutorGui.ResetOnSpawn = false
+ExecutorGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- Create the main frame
+local MainFrame = Instance.new("Frame")
+MainFrame.Name = "MainFrame"
+MainFrame.Size = UDim2.new(0, 300, 0, 200)
+MainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
+MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+MainFrame.BackgroundTransparency = 0.6
+MainFrame.BorderSizePixel = 0
+MainFrame.Parent = ExecutorGui
+
+-- Make the main frame draggable
+dragify(MainFrame)
+
+-- Create the title label
+local TitleLabel = Instance.new("TextLabel")
+TitleLabel.Name = "TitleLabel"
+TitleLabel.Size = UDim2.new(1, 0, 0, 30)
+TitleLabel.Position = UDim2.new(0, 0, 0, 0)
+TitleLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+TitleLabel.BackgroundTransparency = 0.5
+TitleLabel.BorderSizePixel = 0
+TitleLabel.Text = "Balli Executor"
+TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TitleLabel.Font = Enum.Font.SourceSansBold
+TitleLabel.TextSize = 20
+TitleLabel.Parent = MainFrame
+
+-- Create the script text box
+local ScriptTextBox = Instance.new("TextBox")
+ScriptTextBox.Name = "ScriptTextBox"
+ScriptTextBox.Size = UDim2.new(1, -20, 1, -100)
+ScriptTextBox.Position = UDim2.new(0, 10, 0, 40)
+ScriptTextBox.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+ScriptTextBox.BackgroundTransparency = 0.5
+ScriptTextBox.BorderSizePixel = 0
+ScriptTextBox.Text = ""
+ScriptTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+ScriptTextBox.Font = Enum.Font.SourceSans
+ScriptTextBox.TextSize = 18
+ScriptTextBox.TextWrapped = true
+ScriptTextBox.Parent = MainFrame
+
+-- Create the execute button
+local ExecuteButton = Instance.new("TextButton")
+ExecuteButton.Name = "ExecuteButton"
+ExecuteButton.Size = UDim2.new(0.5, -15, 0, 30)
+ExecuteButton.Position = UDim2.new(0, 10, 1, -40)
+ExecuteButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+ExecuteButton.BackgroundTransparency = 0.5
+ExecuteButton.BorderSizePixel = 0
+ExecuteButton.Text = "Execute"
+ExecuteButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ExecuteButton.Font = Enum.Font.SourceSansBold
+ExecuteButton.TextSize = 18
+ExecuteButton.Parent = MainFrame
+
+-- Create the clear button
+local ClearButton = Instance.new("TextButton")
+ClearButton.Name = "ClearButton"
+ClearButton.Size = UDim2.new(0.5, -15, 0, 30)
+ClearButton.Position = UDim2.new(0.5, 5, 1, -40)
+ClearButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+ClearButton.BackgroundTransparency = 0.5
+ClearButton.BorderSizePixel = 0
+ClearButton.Text = "Clear"
+ClearButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ClearButton.Font = Enum.Font.SourceSansBold
+ClearButton.TextSize = 18
+ClearButton.Parent = MainFrame
+
+-- Function to execute the script
+local function ExecuteScript()
+    local script = ScriptTextBox.Text
+    if script ~= "" then
+        local success, error = pcall(function()
+            local highlightedScript = script:gsub(
+                "(%-%-[^\n]*)", -- Match Lua comments
+                function(comment)
+                    return '<font color="#888888">' .. comment .. '</font>'
+                end
+            )
+            
+            ScriptTextBox.Text = highlightedScript
+            loadstring(script)()
+        end)
+        
+        if success then
+            game:GetService("CoreGui").TopBar.Active = true
+            game:GetService("CoreGui").TopBar.Name = "Monster"
+            game:GetService("CoreGui").TopBar.Title.Text = "Monster"
+            game:GetService("CoreGui").TopBar.Description.Text = "Successfully Executed"
+        else
+            warn("Script execution error:", error)
+        end
+    end
+end
+
+-- Function to clear the script text box
+local function ClearScript()
+    ScriptTextBox.Text = ""
+end
+
+-- Connect the execute button to the script execution function
+ExecuteButton.MouseButton1Click:Connect(ExecuteScript)
+
+-- Connect the clear button to the clear script function
+ClearButton.MouseButton1Click:Connect(ClearScript)
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "RobloxGUI"
+gui.Parent = game.CoreGui
+
+local changeframename = Instance.new("Frame")
+changeframename.Size = UDim2.new(0, 50, 0, 50)
+changeframename.Position = UDim2.new(0, 10, 0, 10)
+changeframename.BackgroundColor3 = Color3.new(251, 251, 251)
+changeframename.BorderColor3 = Color3.new(0, 0, 0)
+changeframename.BorderSizePixel = 1
+changeframename.Active = true
+changeframename.Draggable = false
+changeframename.Parent = gui
+
+------------------------main to make it work-----------------------
+function loadGithubScript(user,res_name,branch,path)
+local str = "https://raw.githubusercontent.com/%s/%s/%s/%s"
+local fmt = string.format(str,user,res_name,branch,path)
+return loadstring(game:HttpGet(fmt))()
+end
+
+loadGithubScript("ZenKiri8","Zen-Src-Code","main","Main.lua")
+
+
