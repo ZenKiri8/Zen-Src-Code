@@ -2031,3 +2031,12 @@ local window = library:AddWindow("Dog Milk | Executor", {
 
 local features = window:AddTab("Executor")
 features:Show()
+
+local features = window:AddTab("Esp") -- Name of tab
+features2:Show() -- shows the tab
+
+local features = window:AddTab("Script Hub") -- Name of tab
+features3:Show() -- shows the tab
+
+local features = window:AddTab("Settings") -- Name of tab
+features4:Show() -- shows the tab
