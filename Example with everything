@@ -2040,3 +2040,41 @@ features3:Show() -- shows the tab
 
 local features = window:AddTab("Settings") -- Name of tab
 features4:Show() -- shows the tab
+
+features:AddTextBox("--Dog Milk | Executor --", function(text) -- u can add any text to "text"
+	
+end)
+
+features:AddButton("Execute",function()
+	loadstring(script.text)()
+end)
+
+features:AddButton("Clear",function()
+	script.text = ""
+end)
+
+features:AddButton("Auto Execute",function()
+	-- Code here
+end)
+
+local switch = features2:AddSwitch("Line", function(bool)
+	 -- toggle_god_mode(bool)
+end)
+switch:Set(true)
+
+local switch = features2:AddSwitch("Box", function(bool)
+	 -- toggle_god_mode(bool)
+end)
+switch:Set(true)
+
+local switch = features2:AddSwitch("Name", function(bool)
+	 -- toggle_god_mode(bool)
+end)
+switch:Set(true)
+
+-- Add console for ur Script/Gui, Idk if works
+features:AddConsole({ 
+	["y"] = 210,
+	["readonly"] = false,  
+	["source"] = "Lua",
+})
