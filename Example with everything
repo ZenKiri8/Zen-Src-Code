@@ -6,7 +6,7 @@
 
 local ui_options = {
 	main_color = Color3.fromRGB(46, 42, 42),
-	min_size = Vector2.new(100, 500),
+	min_size = Vector2.new(300, 200),
 	toggle_key = Enum.KeyCode.RightShift,
 	can_resize = true,
 }
@@ -2025,7 +2025,7 @@ end
 --script begin 
 local window = library:AddWindow("Dog Milk | Executor", {
 	main_color = Color3.fromRGB(46, 42, 42),
-	min_size = Vector2.new(100, 50),
+	min_size = Vector2.new(300, 200),
 	can_resize = false,
 })
 
